@@ -18,14 +18,32 @@
 
 # COLOCAR TODOS OS TOKENS (SEPARAR TODOS OS TOKENS)
 
-%token PLUS MINUS MULT DIV
-%token var  INT STRING STRINGVAL
+%token PLUS
+%token MINUS
+%token MULT
+%token DIV
+%token var
+%token INT
+%token STRING
+%token STRINGVAL
+
 %token INTVAL
-%token OR AND
-%token IGUAL COMPARE MAIOR MENOR NOT
-%token ABRE_CHAVES FECHA_CHAVES ABRE_PAR FECHA_PAR
-%token enquanto SE SE_NAO
-%token PRINT READ
+%token OR
+%token AND
+%token IGUAL
+%token COMPARE
+%token MAIOR
+%token MENOR
+%token NOT
+%token ABRE_CHAVES
+%token FECHA_CHAVES
+%token ABRE_PAR
+%token FECHA_PAR
+%token enquanto
+%token SE
+%token SE_NAO
+%token PRINT
+%token READ
 
 %type <nomes> STRING var STRINGVAL
 %type <num> INTVAL PRINT
