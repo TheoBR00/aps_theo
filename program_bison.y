@@ -16,8 +16,6 @@
     char *nomes;
 }
 
-# COLOCAR TODOS OS TOKENS (SEPARAR TODOS OS TOKENS)
-
 %token PLUS
 %token MINUS
 %token MULT
