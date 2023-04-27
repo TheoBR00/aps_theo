@@ -23,6 +23,7 @@
 %token var
 %token INT
 %token STRING
+%token IDENT
 %token STRINGVAL
 
 %token INTVAL
