@@ -61,7 +61,7 @@ arg_func: ""
         | vardec
         | vardec "," arg_func
 
-ident : STRINGVAL
+ident : IDENT
 
 chama_ident : ident
             | ident "," chama_ident
