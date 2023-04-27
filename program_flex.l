@@ -34,6 +34,7 @@
 "}"             { return FECHA_CHAVES;}
 "("             { return ABRE_PAR;}
 ")"             { return FECHA_PAR;}
+";"             { return PONTO_VIRGULA;}
 
 variavel        { return var;}
 int             { return INT;}

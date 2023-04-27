@@ -38,6 +38,7 @@
 %token FECHA_CHAVES
 %token ABRE_PAR
 %token FECHA_PAR
+%token PONTO_VIRGULA
 %token enquanto
 %token SE
 %token SE_NAO
@@ -85,8 +86,8 @@ function-def : tipo STRINGVAL ABRE_PAR arg_func FECHA_PAR BLOCK_FUNC
 
 BLOCK_FUNC : ABRE_CHAVES chama_state FECHA_CHAVES
 
-STATEMENT_FUNC : ident "=" REL_EXP ";"
-                | PRINT ABRE_PAR REL_EXP FECHA_PAR ';'
+STATEMENT_FUNC : ident "=" REL_EXP PONTO_VIRGULA
+                | PRINT ABRE_PAR REL_EXP FECHA_PAR PONTO_VIRGULA
                 | enquanto ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC
                 | BLOCK_FUNC
                 | SE ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC
