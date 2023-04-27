@@ -50,6 +50,6 @@ Read            {return READ;}
 
 1-9[0-9]+          { return NUM;}
 a-zA-Z[a-zA-Z0-9]*    { return IDENT;}
-[a-zA-Z0-9-.*/;()]    { return STRINGVAL;}
+[a-zA-Z0-9-.-*-/-;-(-)]    { return STRINGVAL;}
 .               ;
 %%
