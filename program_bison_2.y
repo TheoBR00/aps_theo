@@ -52,14 +52,16 @@ tipo: INT | STRING
 
 ident : IDENT
 
-chama_ident : ident
-            | ident "," chama_ident
+chama_ident : ident chama_ident_2
+
+chama_ident_2 : "," chama_ident
+               | IGUAL REL_EXP PONTO_VIRGULA
 
 chama_block: ABRE_CHAVES BLOCK_FUNC
 
 vardec : var chama_ident ":" tipo
 
-chama_exp : 
+chama_exp : EXPRESSION
           | EXPRESSION chama_exp
 
 chama_term : TERM
@@ -71,7 +73,7 @@ chama_factor : FACTOR
 BLOCK_FUNC : FECHA_CHAVES
             | STATEMENT_FUNC BLOCK_FUNC
 
-STATEMENT_FUNC : ident "=" REL_EXP PONTO_VIRGULA
+STATEMENT_FUNC : chama_ident
                 | PRINT ABRE_PAR REL_EXP FECHA_PAR PONTO_VIRGULA
                 | enquanto ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC
                 | BLOCK_FUNC
