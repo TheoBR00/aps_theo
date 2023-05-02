@@ -57,7 +57,7 @@
 
 %%
 
-tipo: INT | STRING
+tipo:= INT | STRING
 
 ident : IDENT
 
