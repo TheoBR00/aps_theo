@@ -45,28 +45,21 @@
 %token PRINT
 %token READ
 
-%type <nomes> STRING var STRINGVAL
-%type <num> INTVAL PRINT
-%type <nomes> PLUS MINUS MULT DIV
-%type <nomes> OR AND
-%type <nomes> IGUAL COMPARE MAIOR MENOR NOT
-%type <nomes> ABRE_CHAVES FECHA_CHAVES ABRE_PAR FECHA_PAR
-%type <nomes> enquanto SE SE_NAO
-%type <nomes> STATEMENT_FUNC
-
 
 %%
 
-tipo:= INT | STRING
+tipo: INT | STRING
 
 ident : IDENT
 
 chama_ident : ident
             | ident "," chama_ident
 
+chama_block: ABRE_CHAVES BLOCK_FUNC
+
 vardec : var chama_ident ":" tipo
 
-chama_exp : EXPRESSION
+chama_exp : 
           | EXPRESSION chama_exp
 
 chama_term : TERM
@@ -75,7 +68,8 @@ chama_term : TERM
 chama_factor : FACTOR
               | FACTOR chama_factor
 
-BLOCK_FUNC : ABRE_CHAVES STATEMENT_FUNC FECHA_CHAVES
+BLOCK_FUNC : FECHA_CHAVES
+            | STATEMENT_FUNC BLOCK_FUNC
 
 STATEMENT_FUNC : ident "=" REL_EXP PONTO_VIRGULA
                 | PRINT ABRE_PAR REL_EXP FECHA_PAR PONTO_VIRGULA
