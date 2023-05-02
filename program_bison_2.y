@@ -59,19 +59,12 @@
 
 tipo: INT | STRING
 
-arg_func:
-        | vardec
-        | vardec "," arg_func
-
 ident : IDENT
 
 chama_ident : ident
             | ident "," chama_ident
 
 vardec : var chama_ident ":" tipo
-
-chama_state: STATEMENT_FUNC
-            | STATEMENT_FUNC chama_state
 
 chama_exp : EXPRESSION
           | EXPRESSION chama_exp
@@ -82,9 +75,7 @@ chama_term : TERM
 chama_factor : FACTOR
               | FACTOR chama_factor
 
-function-def : tipo STRINGVAL ABRE_PAR arg_func FECHA_PAR BLOCK_FUNC
-
-BLOCK_FUNC : ABRE_CHAVES chama_state FECHA_CHAVES
+BLOCK_FUNC : ABRE_CHAVES STATEMENT_FUNC FECHA_CHAVES
 
 STATEMENT_FUNC : ident "=" REL_EXP PONTO_VIRGULA
                 | PRINT ABRE_PAR REL_EXP FECHA_PAR PONTO_VIRGULA
