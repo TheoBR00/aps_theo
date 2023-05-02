@@ -94,7 +94,7 @@ TERM : FACTOR
       | FACTOR AND chama_factor
 
 FACTOR: INTVAL
-      | ident
+      | IDENT
       | PLUS FACTOR
       | MINUS FACTOR
       | NOT FACTOR
