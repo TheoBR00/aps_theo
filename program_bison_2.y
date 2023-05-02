@@ -72,7 +72,7 @@ chama_factor : FACTOR
 BLOCK_FUNC : FECHA_CHAVES
             | STATEMENT_FUNC BLOCK_FUNC
 
-STATEMENT_FUNC : chama_ident_2
+STATEMENT_FUNC : chama_ident
                 | PRINT ABRE_PAR REL_EXP FECHA_PAR PONTO_VIRGULA
                 | enquanto ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC
                 | BLOCK_FUNC
