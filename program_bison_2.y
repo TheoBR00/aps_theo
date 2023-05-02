@@ -51,9 +51,7 @@
 
 tipo: INT | STRING
 
-ident : IDENT
-
-chama_ident : ident chama_ident_2
+chama_ident : IDENT chama_ident_2
 
 chama_ident_2 : VIRGULA chama_ident
                | IGUAL REL_EXP PONTO_VIRGULA
