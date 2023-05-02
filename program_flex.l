@@ -35,6 +35,7 @@
 "("             { return ABRE_PAR;}
 ")"             { return FECHA_PAR;}
 ";"             { return PONTO_VIRGULA;}
+","             { return VIRGULA;}
 
 variavel        { return var;}
 int             { return INT;}

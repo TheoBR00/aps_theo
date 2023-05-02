@@ -39,6 +39,7 @@
 %token ABRE_PAR
 %token FECHA_PAR
 %token PONTO_VIRGULA
+%token VIRGULA
 %token enquanto
 %token SE
 %token SE_NAO
@@ -54,7 +55,7 @@ ident : IDENT
 
 chama_ident : ident chama_ident_2
 
-chama_ident_2 : "," chama_ident
+chama_ident_2 :  chama_ident
                | IGUAL REL_EXP PONTO_VIRGULA
 
 chama_block: ABRE_CHAVES BLOCK_FUNC
