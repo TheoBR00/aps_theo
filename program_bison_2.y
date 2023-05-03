@@ -66,6 +66,7 @@ chama_ident_2
 chama_block: ABRE_CHAVES BLOCK_FUNC
 
 vardec : var chama_ident_2 ":" tipo
+  ;
 
 chama_exp : EXPRESSION
           | EXPRESSION chama_exp
@@ -86,6 +87,7 @@ STATEMENT_FUNC : chama_ident
                 | BLOCK_FUNC
                 | SE ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC
                 | SE ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC SE_NAO STATEMENT_FUNC
+                ;
 
 REL_EXP : EXPRESSION COMPARE chama_exp
         | EXPRESSION MAIOR chama_exp
