@@ -49,6 +49,9 @@
 
 %%
 
+chama_block: ABRE_CHAVES BLOCK_FUNC
+  ;
+
 chama_ident 
   : IDENT chama_ident_2
   ;
@@ -63,10 +66,7 @@ chama_ident_2
   | IGUAL REL_EXP PONTO_VIRGULA
   ;
 
-chama_block: ABRE_CHAVES BLOCK_FUNC
-  ;
-
-vardec : var chama_ident_2 DOIS_PONTOS tipo
+vardec : var chama_ident_2 ":" tipo
   ;
 
 chama_exp : EXPRESSION
@@ -98,7 +98,7 @@ REL_EXP : EXPRESSION COMPARE chama_exp
 EXPRESSION : TERM                       
             | TERM PLUS TERM            
             | TERM MINUS chama_term     
-            | TERM OR chama_term        
+            | TERM OR chama_term
 
 TERM : FACTOR
       | FACTOR MULT chama_factor
