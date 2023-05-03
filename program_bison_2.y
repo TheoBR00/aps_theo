@@ -49,13 +49,13 @@
 
 %%
 
+chama_ident 
+  : IDENT chama_ident_2
+  ;
+
 tipo
   : INT 
   | STRING
-  ;
-
-chama_ident 
-  : IDENT chama_ident_2
   ;
 
 chama_ident_2 
