@@ -49,12 +49,19 @@
 
 %%
 
-tipo: INT | STRING
+tipo
+  : INT 
+  | STRING
+  ;
 
-chama_ident : IDENT chama_ident_2
+chama_ident 
+  : IDENT chama_ident_2
+  ;
 
-chama_ident_2 : VIRGULA chama_ident
-               | IGUAL REL_EXP PONTO_VIRGULA
+chama_ident_2 
+  : VIRGULA chama_ident
+  | IGUAL REL_EXP PONTO_VIRGULA
+  ;
 
 chama_block: ABRE_CHAVES BLOCK_FUNC
 
