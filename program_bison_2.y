@@ -66,7 +66,7 @@ chama_ident_2
 chama_block: ABRE_CHAVES BLOCK_FUNC
   ;
 
-vardec : var chama_ident_2 ":" tipo
+vardec : var chama_ident_2 DOIS_PONTOS tipo
   ;
 
 chama_exp : EXPRESSION
