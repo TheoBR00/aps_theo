@@ -64,12 +64,14 @@ chama_ident_2
   ;
 
 chama_block: ABRE_CHAVES BLOCK_FUNC
+  ;
 
 vardec : var chama_ident_2 ":" tipo
   ;
 
 chama_exp : EXPRESSION
           | EXPRESSION chama_exp
+          ;
 
 chama_term : TERM
             | TERM chama_term
