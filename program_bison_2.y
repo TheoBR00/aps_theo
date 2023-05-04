@@ -70,20 +70,19 @@ chama_ident_2
 vardec : var chama_ident_2 ":" tipo
   ;
 
-chama_exp : EXPRESSION
-          | EXPRESSION chama_exp
+chama_exp : PLUS EXPRESSION
+          | MINUS EXPRESSION
+          | OR EXPRESSION
           ;
 
 chama_state : END
             | SE_NAO chama_state
+            | STATEMENT_FUNC chama_state
 
-
-
-chama_term : TERM
-            | TERM chama_term
-
-chama_factor : FACTOR
-              | FACTOR chama_factor
+chama_factor : MULT FACTOR
+             | DIV FACTOR
+             | AND FACTOR
+             ;
 
 BLOCK_FUNC : FECHA_CHAVES
             | STATEMENT_FUNC BLOCK_FUNC
@@ -100,15 +99,11 @@ REL_EXP : EXPRESSION COMPARE chama_exp
         | EXPRESSION MAIOR chama_exp
         | EXPRESSION MENOR chama_exp
 
-EXPRESSION : TERM                       
-            | TERM PLUS TERM            
-            | TERM MINUS chama_term     
-            | TERM OR chama_term
+EXPRESSION : TERM chama_exp
+            ;
 
-TERM : FACTOR
-      | FACTOR MULT chama_factor
-      | FACTOR DIV chama_factor
-      | FACTOR AND chama_factor
+TERM : FACTOR chama_factor
+      ;
 
 FACTOR: INTVAL
       | IDENT
