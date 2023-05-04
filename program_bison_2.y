@@ -50,9 +50,8 @@
 
 %%
 
-chama_ident 
-  : IDENT chama_ident_2
-  ;
+chama_ident : IDENT chama_ident_2
+            ;
 
 chama_block: ABRE_CHAVES BLOCK_FUNC
   ;
