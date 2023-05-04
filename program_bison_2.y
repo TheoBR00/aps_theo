@@ -101,6 +101,7 @@ REL_EXP : EXPRESSION COMPARE chama_exp
         | EXPRESSION MENOR chama_exp
 
 EXPRESSION : TERM chama_exp
+            ;
 
 TERM : FACTOR
       | FACTOR MULT chama_factor
