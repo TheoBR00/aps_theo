@@ -79,9 +79,6 @@ chama_state : END
             | SE_NAO chama_state
             | STATEMENT_FUNC chama_state
 
-chama_term : TERM
-            | TERM chama_term
-
 chama_factor : FACTOR
               | FACTOR chama_factor
 
@@ -101,8 +98,6 @@ REL_EXP : EXPRESSION COMPARE chama_exp
         | EXPRESSION MENOR chama_exp
 
 EXPRESSION : TERM chama_exp
-            | TERM PLUS TERM
-            | TERM OR chama_term
 
 TERM : FACTOR
       | FACTOR MULT chama_factor
