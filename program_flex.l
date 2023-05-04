@@ -44,6 +44,7 @@ String          { return STRING;}
 enquanto        { return enquanto;}
 se              { return SE;}
 se_nao          { return SE_NAO;}
+end             { return END;}
 [ \t\n]         ;
 
 Print           {return PRINT;}

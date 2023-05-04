@@ -73,6 +73,11 @@ chama_exp : EXPRESSION
           | EXPRESSION chama_exp
           ;
 
+chama_state : END
+            | SE_NAO chama_state
+
+
+
 chama_term : TERM
             | TERM chama_term
 
@@ -87,8 +92,7 @@ STATEMENT_FUNC : chama_ident
                 | PRINT ABRE_PAR REL_EXP FECHA_PAR PONTO_VIRGULA
                 | enquanto ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC
                 | BLOCK_FUNC
-                | SE ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC
-                | SE ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC SE_NAO STATEMENT_FUNC
+                | SE ABRE_PAR REL_EXP FECHA_PAR chama_state
                 ;
 
 REL_EXP : EXPRESSION COMPARE chama_exp
