@@ -91,7 +91,7 @@ BLOCK_FUNC : FECHA_CHAVES
 STATEMENT_FUNC : chama_ident
                 | vardec
                 | PRINT ABRE_PAR REL_EXP FECHA_PAR PONTO_VIRGULA
-                | enquanto ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC
+                | enquanto ABRE_PAR REL_EXP FECHA_PAR chama_state
                 | BLOCK_FUNC
                 | SE ABRE_PAR REL_EXP FECHA_PAR chama_state
                 ;
