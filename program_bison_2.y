@@ -50,10 +50,11 @@
 
 %%
 
-chama_ident : IDENT chama_ident_2
-            ;
-
 chama_block: ABRE_CHAVES BLOCK_FUNC
+  ;
+
+chama_ident 
+  : IDENT chama_ident_2
   ;
 
 tipo
@@ -78,10 +79,11 @@ chama_state : END
             | SE_NAO chama_state
             | STATEMENT_FUNC chama_state
 
-chama_factor : MULT FACTOR
-             | DIV FACTOR
-             | AND FACTOR
-             ;
+chama_term : TERM
+            | TERM chama_term
+
+chama_factor : FACTOR
+              | FACTOR chama_factor
 
 BLOCK_FUNC : FECHA_CHAVES
             | STATEMENT_FUNC BLOCK_FUNC
@@ -98,11 +100,15 @@ REL_EXP : EXPRESSION COMPARE chama_exp
         | EXPRESSION MAIOR chama_exp
         | EXPRESSION MENOR chama_exp
 
-EXPRESSION : TERM chama_exp
-            ;
+EXPRESSION : TERM chama_exp                    
+            | TERM PLUS TERM            
+            | TERM MINUS chama_term     
+            | TERM OR chama_term
 
-TERM : FACTOR chama_factor
-      ;
+TERM : FACTOR
+      | FACTOR MULT chama_factor
+      | FACTOR DIV chama_factor
+      | FACTOR AND chama_factor
 
 FACTOR: INTVAL
       | IDENT
