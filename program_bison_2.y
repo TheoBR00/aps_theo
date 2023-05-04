@@ -43,6 +43,7 @@
 %token enquanto
 %token SE
 %token SE_NAO
+%token END
 %token PRINT
 %token READ
 
