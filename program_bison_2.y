@@ -102,7 +102,6 @@ REL_EXP : EXPRESSION COMPARE chama_exp
 
 EXPRESSION : TERM chama_exp
             | TERM PLUS TERM
-            | TERM MINUS chama_term
             | TERM OR chama_term
 
 TERM : FACTOR
