@@ -80,6 +80,7 @@ chama_rel : COMPARE REL_EXP
           | MAIOR REL_EXP
           | MENOR REL_EXP
           | EXPRESSION
+          ;
 
 chama_state : END
             | SE_NAO chama_state
