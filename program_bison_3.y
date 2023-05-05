@@ -86,8 +86,10 @@ chama_state : END
             | SE_NAO chama_state
             | STATEMENT_FUNC chama_state
 
-chama_factor : FACTOR
-              | FACTOR chama_factor
+chama_factor : MULT TERM
+             | DIV TERM
+             | AND TERM
+             | FACTOR
 
 BLOCK_FUNC : FECHA_CHAVES
             | STATEMENT_FUNC BLOCK_FUNC
@@ -106,10 +108,8 @@ REL_EXP : EXPRESSION chama_rel
 EXPRESSION : TERM chama_exp
             ;
 
-TERM : FACTOR
-      | FACTOR MULT chama_factor
-      | FACTOR DIV chama_factor
-      | FACTOR AND chama_factor
+TERM : FACTOR chama_factor
+      ;
 
 FACTOR: INTVAL
       | IDENT
