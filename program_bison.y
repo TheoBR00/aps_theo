@@ -39,76 +39,80 @@
 %token ABRE_PAR
 %token FECHA_PAR
 %token PONTO_VIRGULA
+%token VIRGULA
 %token enquanto
 %token SE
 %token SE_NAO
+%token END
 %token PRINT
 %token READ
-
-%type <nomes> STRING var STRINGVAL
-%type <num> INTVAL PRINT
-%type <nomes> PLUS MINUS MULT DIV
-%type <nomes> OR AND
-%type <nomes> IGUAL COMPARE MAIOR MENOR NOT
-%type <nomes> ABRE_CHAVES FECHA_CHAVES ABRE_PAR FECHA_PAR
-%type <nomes> enquanto SE SE_NAO
-%type <nomes> STATEMENT_FUNC
 
 
 %%
 
-tipo: INT | STRING
+chama_block: ABRE_CHAVES BLOCK_FUNC
+  ;
 
-arg_func:
-        | vardec
-        | vardec "," arg_func
+chama_ident 
+  : IDENT chama_ident_2
+  ;
 
-ident : IDENT
+tipo
+  : INT 
+  | STRING
+  ;
 
-chama_ident : ident
-            | ident "," chama_ident
+chama_ident_2 
+  : VIRGULA chama_ident
+  | IGUAL REL_EXP PONTO_VIRGULA
+  ;
 
-vardec : var chama_ident ":" tipo
+vardec : var chama_ident_2 ":" tipo
+  ;
 
-chama_state: STATEMENT_FUNC
+chama_exp : PLUS EXPRESSION
+          | MINUS EXPRESSION
+          | OR EXPRESSION
+          | TERM
+          ;
+
+chama_rel : COMPARE REL_EXP
+          | MAIOR REL_EXP
+          | MENOR REL_EXP
+          | EXPRESSION
+          ;
+
+chama_state : END
+            | SE_NAO chama_state
             | STATEMENT_FUNC chama_state
 
-chama_exp : EXPRESSION
-          | EXPRESSION chama_exp
+chama_factor : MULT TERM
+             | DIV TERM
+             | AND TERM
+             | FACTOR
 
-chama_term : TERM
-            | TERM chama_term
+BLOCK_FUNC : FECHA_CHAVES
+            | STATEMENT_FUNC BLOCK_FUNC
 
-chama_factor : FACTOR
-              | FACTOR chama_factor
-
-function-def : tipo STRINGVAL ABRE_PAR arg_func FECHA_PAR BLOCK_FUNC
-
-BLOCK_FUNC : ABRE_CHAVES chama_state FECHA_CHAVES
-
-STATEMENT_FUNC : ident "=" REL_EXP PONTO_VIRGULA
+STATEMENT_FUNC : chama_ident
+                | vardec
                 | PRINT ABRE_PAR REL_EXP FECHA_PAR PONTO_VIRGULA
-                | enquanto ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC
+                | enquanto ABRE_PAR REL_EXP FECHA_PAR chama_state
                 | BLOCK_FUNC
-                | SE ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC
-                | SE ABRE_PAR REL_EXP FECHA_PAR STATEMENT_FUNC SE_NAO STATEMENT_FUNC
+                | SE ABRE_PAR REL_EXP FECHA_PAR chama_state
+                ;
 
-REL_EXP : EXPRESSION COMPARE chama_exp
-        | EXPRESSION MAIOR chama_exp
-        | EXPRESSION MENOR chama_exp
+REL_EXP : EXPRESSION chama_rel
+         ;
 
-EXPRESSION : TERM                       
-            | TERM PLUS TERM            
-            | TERM MINUS chama_term     
-            | TERM OR chama_term        
+EXPRESSION : TERM chama_exp
+            ;
 
-TERM : FACTOR
-      | FACTOR MULT chama_factor
-      | FACTOR DIV chama_factor
-      | FACTOR AND chama_factor
+TERM : FACTOR chama_factor
+      ;
 
 FACTOR: INTVAL
-      | ident
+      | IDENT
       | PLUS FACTOR
       | MINUS FACTOR
       | NOT FACTOR
