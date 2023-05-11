@@ -42,6 +42,7 @@
 %token VIRGULA
 %token enquanto
 %token SE
+%token NO_ENTANTO
 %token SE_NAO
 %token END
 %token PRINT
@@ -77,6 +78,7 @@ chama_state : END
 
 BLOCK_FUNC : FECHA_CHAVES
             | STATEMENT_FUNC BLOCK_FUNC
+            ;
 
 STATEMENT_FUNC : chama_ident
                 | vardec

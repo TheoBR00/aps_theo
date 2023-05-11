@@ -43,6 +43,7 @@ String          { return STRING;}
 
 enquanto        { return enquanto;}
 se              { return SE;}
+no entanto pode ser {return NO_ENTANTO;}
 se_nao          { return SE_NAO;}
 end             { return END;}
 [ \t\n]         ;
