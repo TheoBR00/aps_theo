@@ -79,11 +79,7 @@ chama_rel : COMPARE REL_EXP
 chama_state : END
             | SE_NAO chama_state
             | STATEMENT_FUNC chama_state
-
-chama_factor : MULT TERM
-             | DIV TERM
-             | AND TERM
-             | FACTOR
+            ;
 
 BLOCK_FUNC : FECHA_CHAVES
             | STATEMENT_FUNC BLOCK_FUNC
@@ -105,7 +101,10 @@ EXPRESSION : TERM
             | TERM OR TERM
             ;
 
-TERM : FACTOR chama_factor
+TERM : FACTOR
+      | FACTOR MULT FACTOR
+      | FACTOR DIV FACTOR
+      | FACTOR AND FACTOR
       ;
 
 FACTOR: INTVAL
