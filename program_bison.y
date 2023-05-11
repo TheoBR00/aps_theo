@@ -70,12 +70,6 @@ chama_ident_2
 vardec : var chama_ident_2 ":" tipo
   ;
 
-chama_exp : PLUS EXPRESSION
-          | MINUS EXPRESSION
-          | OR EXPRESSION
-          | TERM
-          ;
-
 chama_rel : COMPARE REL_EXP
           | MAIOR REL_EXP
           | MENOR REL_EXP
@@ -105,7 +99,10 @@ STATEMENT_FUNC : chama_ident
 REL_EXP : EXPRESSION chama_rel
          ;
 
-EXPRESSION : TERM chama_exp
+EXPRESSION : TERM
+            | TERM PLUS TERM
+            | TERM MINUS TERM
+            | TERM OR TERM
             ;
 
 TERM : FACTOR chama_factor
