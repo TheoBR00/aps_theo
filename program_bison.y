@@ -52,13 +52,6 @@
 
 %%
 
-function_def: FUNCAO IDENT ABRE_PAR args FECHA_PAR ":" tipo chama_block
-
-args:
-    | IDENT ":" tipo
-    | IDENT ":" tipo VIRGULA args
-    ;
-
 chama_block: ABRE_CHAVES BLOCK_FUNC
   ;
 
