@@ -40,6 +40,7 @@
 variavel        { return var;}
 int             { return INT;}
 String          { return STRING;}
+funcao          { return FUNCAO;}
 
 enquanto        { return enquanto;}
 se              { return SE;}
