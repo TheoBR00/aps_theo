@@ -25,7 +25,6 @@
 %token STRING
 %token IDENT
 %token STRINGVAL
-%token FUNCAO
 
 %token INTVAL
 %token OR
