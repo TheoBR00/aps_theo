@@ -1,0 +1,7 @@
+var a: Inteiro
+var b: Frase
+
+a = 1
+b = "1"
+printa_ai(a)
+printa_ai(b)
