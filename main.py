@@ -99,8 +99,9 @@ class Se(Node):
         
     def evaluate(self, st):
         
-        if self.children[0].evaluate(st)[0]:
-            self.children[1].evaluate(st)
+        if len(self.children) == 2:
+            if self.children[0].evaluate(st)[0]:
+                self.children[1].evaluate(st)
         
         elif len(self.children) > 2:
             self.children[2].evaluate(st)
@@ -122,7 +123,11 @@ class VarDec(Node):
         self.children = children
         
     def evaluate(self, st):
-        st.create(self.children[0].value, (self.value, self.children[1].value))
+        if type(self.children[0]) == list:
+            for i in self.children[0]:
+                st.create(i.value, (self.value, self.children[1].value))
+        else:
+            st.create(self.children[0].value, (self.value, self.children[1].value))
         #print("CRIOU: ", self.children[0].value)
 
 class FuncDec(Node):
@@ -163,8 +168,6 @@ class FuncCall(Node):
 
         ret = FuncTable.getter(nome)
         tipo = ret.value
-        #print("TIPO FUNC: ", tipo)
-        #print("ret.children[-1]: ", ret.children)
         
         for i in range(1, len(ret.children) - 1):
             ret.children[i].evaluate(nova_symboltable)
@@ -173,11 +176,8 @@ class FuncCall(Node):
             nova_symboltable.setter(ret.children[i].children[0].value, val)
         
         if len(ret.children)-2 != len(self.children):
-            #print("LEN SELF.CHILDREN: ", len(self.children))
-            #print("LEN ARGS: ", len(args))
             raise
         
-        #print("RET.CHILDREN[-1].children[-1]: ", ret.children[-1].children[-1])
         block = ret.children[-1].evaluate(nova_symboltable)
         #print("BLOCK CALL: ", block)
 
@@ -185,10 +185,6 @@ class FuncCall(Node):
             raise
 
         return block
-        
-        
-        #new_st.setter()
-
 
 class Retorna(Node):
     def __init__(self, value, children):
@@ -222,7 +218,8 @@ class Assignment(Node):
         
     def evaluate(self, st):
         #x = SymbolTable.getter(self.children[0].value)
-        st.setter(self.children[0].value, (self.children[1].evaluate(st)))
+        for i in self.children[0]:
+            st.setter(i.value, (self.children[1].evaluate(st)))
 
 
 class Print(Node):
@@ -325,7 +322,7 @@ class Tokenizer:
         list_ops_check = ["+", "-"]
         list_mults_check = ["/", "*"]
         list_par = ["(", ")"]
-        reserved = ["printa_ai", "Se", "enquanto", "Senao", "end","readline", "Inteiro", "Frase", "variavel", "funcao", "retorna"]
+        reserved = ["printa_ai", "se", "enquanto", "senao", "end","leitura", "Inteiro", "Frase", "variavel", "funcao", "retorna"]
         
         num = ""
         
@@ -625,7 +622,7 @@ class Parser:
 
             return res
         
-        elif Parser.tokenizer.nexti.tipo == "READLINE":
+        elif Parser.tokenizer.nexti.tipo == "LEITURA":
             Parser.tokenizer.selectNext()
             
             if Parser.tokenizer.nexti.tipo == "A_PARENTESES":
@@ -672,6 +669,13 @@ class Parser:
                 name = Parser.tokenizer.nexti.value
                 no = Identifier(Parser.tokenizer.nexti.value, [])
                 Parser.tokenizer.selectNext()
+                list_ident_2 = [no]
+                while Parser.tokenizer.nexti.tipo == "VIRGULA":
+                    Parser.tokenizer.selectNext()
+                    if Parser.tokenizer.nexti.tipo == "IDENTIFIER":
+                        no = Identifier(Parser.tokenizer.nexti.value, [])
+                        list_ident_2.append(no)
+                    Parser.tokenizer.selectNext()
                 if Parser.tokenizer.nexti.tipo == "TYPE":
                     Parser.tokenizer.selectNext()
                     if Parser.tokenizer.nexti.tipo == "INTEIRO" or Parser.tokenizer.nexti.tipo == "FRASE":
@@ -680,31 +684,37 @@ class Parser:
                         if Parser.tokenizer.nexti.tipo == "BARRA_N":
                             if tipo == "INTEIRO":
                                 no_int = IntVal(0, [])
-                                no_var_dec = VarDec(tipo, [no, no_int])
+                                no_var_dec = VarDec(tipo, [list_ident_2, no_int])
                                 return no_var_dec
                             elif tipo == "FRASE":
                                 no_string = String("", [])
-                                no_var_dec = VarDec(tipo, [no, no_string])
+                                no_var_dec = VarDec(tipo, [list_ident_2, no_string])
                                 return no_var_dec
                         elif Parser.tokenizer.nexti.tipo == "IGUAL":
                             Parser.tokenizer.selectNext()
                             expr = Parser.relExpr()
                             if Parser.tokenizer.nexti.tipo == "BARRA_N":
                                 Parser.tokenizer.selectNext()
-                                no_var_dec = VarDec(tipo, [no, expr])
+                                no_var_dec = VarDec(tipo, [list_ident_2, expr])
                                 return no_var_dec
         if Parser.tokenizer.nexti.tipo == "IDENTIFIER":
             name = Parser.tokenizer.nexti.value
             no = Identifier(Parser.tokenizer.nexti.value, [])
+            list_ident = [no]
             Parser.tokenizer.selectNext()
-
+            while Parser.tokenizer.nexti.tipo == "VIRGULA":
+                Parser.tokenizer.selectNext()
+                if Parser.tokenizer.nexti.tipo == "IDENTIFIER":
+                    no = Identifier(Parser.tokenizer.nexti.value, [])
+                    list_ident.append(no)
+                Parser.tokenizer.selectNext()
             if Parser.tokenizer.nexti.tipo == "IGUAL":
                 Parser.tokenizer.selectNext()
                 expr = Parser.relExpr()
                 #print("EXPR: ", expr)
                 if Parser.tokenizer.nexti.tipo == "BARRA_N":
                     Parser.tokenizer.selectNext()
-                    return Assignment('', [no, expr])
+                    return Assignment('', [list_ident, expr])
                 
                 else:
                     raise
@@ -815,21 +825,19 @@ class Parser:
                         res.append(Parser.parseStatement())
 
                     no_if = Se("se", [exp, Block("", res)])
-
+                    
                     if Parser.tokenizer.nexti.tipo == "SENAO":
                         Parser.tokenizer.selectNext()
-                        if Parser.tokenizer.nexti.tipo == "ABRE_CHAVES":
+                        
+                        if Parser.tokenizer.nexti.tipo == "BARRA_N":
                             Parser.tokenizer.selectNext()
-                            if Parser.tokenizer.nexti.tipo == "BARRA_N":
-                                Parser.tokenizer.selectNext()
-                                el = []
-                                while Parser.tokenizer.nexti.tipo != "FECHA_CHAVES":
-                                    el.append(Parser.parseStatement())
-                                Parser.tokenizer.selectNext()
-                                no_if.children.append(Block("", el))
-                                    
-                                return no_if
-                    
+                            el = []
+                            while Parser.tokenizer.nexti.tipo != "FECHA_CHAVES":
+                                el.append(Parser.parseStatement())
+                            Parser.tokenizer.selectNext()
+                            no_if.children.append(Block("", el))                                        
+                            return no_if
+                        
                     else:
                         Parser.tokenizer.selectNext()
                         return no_if
@@ -854,47 +862,50 @@ class Parser:
 
                 if Parser.tokenizer.nexti.tipo == "A_PARENTESES":
                     Parser.tokenizer.selectNext()
-
-                    if Parser.tokenizer.nexti.tipo == "IDENTIFIER":
-                        #variaveis = []
-                        #variaveis.append(Parser.tokenizer.nexti.value)
-                        arg = Identifier(Parser.tokenizer.nexti.value, [])
+                    if Parser.tokenizer.nexti.tipo == "VARIAVEL":
                         Parser.tokenizer.selectNext()
-                        if Parser.tokenizer.nexti.tipo == "TYPE":
+                        if Parser.tokenizer.nexti.tipo == "IDENTIFIER":
+                            #variaveis = []
+                            #variaveis.append(Parser.tokenizer.nexti.value)
+                            arg = Identifier(Parser.tokenizer.nexti.value, [])
                             Parser.tokenizer.selectNext()
-                            if Parser.tokenizer.nexti.tipo == "INTEIRO" or Parser.tokenizer.nexti.tipo == "FRASE":
-                                tipo = Parser.tokenizer.nexti.tipo
-                                if tipo == "INTEIRO":
-                                    no_int = IntVal(0, [])
-                                    no_var_dec = VarDec(tipo, [arg, no_int])
-                                    no_func.children.append(no_var_dec)
-                                elif tipo == "FRASE":
-                                    no_string = String("", [])
-                                    no_var_dec = VarDec(tipo, [arg, no_string])
-                                    no_func.children.append(no_var_dec)
+                            if Parser.tokenizer.nexti.tipo == "TYPE":
                                 Parser.tokenizer.selectNext()
-                                while Parser.tokenizer.nexti.tipo == "VIRGULA":
+                                if Parser.tokenizer.nexti.tipo == "INTEIRO" or Parser.tokenizer.nexti.tipo == "FRASE":
+                                    tipo = Parser.tokenizer.nexti.tipo
+                                    if tipo == "INTEIRO":
+                                        no_int = IntVal(0, [])
+                                        no_var_dec = VarDec(tipo, [arg, no_int])
+                                        no_func.children.append(no_var_dec)
+                                    elif tipo == "FRASE":
+                                        no_string = String("", [])
+                                        no_var_dec = VarDec(tipo, [arg, no_string])
+                                        no_func.children.append(no_var_dec)
                                     Parser.tokenizer.selectNext()
-                                    if Parser.tokenizer.nexti.tipo == "IDENTIFIER":
-                                        arg = Identifier(Parser.tokenizer.nexti.value, [])
-                                        #variaveis.append(Parser.tokenizer.nexti.value)
-                                        
+                                    while Parser.tokenizer.nexti.tipo == "VIRGULA":
                                         Parser.tokenizer.selectNext()
-                                        if Parser.tokenizer.nexti.tipo == "TYPE":
+                                        if Parser.tokenizer.nexti.tipo == "VARIAVEL":
                                             Parser.tokenizer.selectNext()
-                                            if Parser.tokenizer.nexti.tipo == "INTEIRO" or Parser.tokenizer.nexti.tipo == "FRASE":
-                                                tipo = Parser.tokenizer.nexti.tipo
-                                                if tipo == "INTEIRO":
-                                                    no_int = IntVal(0, [])
-                                                    no_var_dec = VarDec(tipo, [arg, no_int])
-                                                    no_func.children.append(no_var_dec)
-                                                elif tipo == "FRASE":
-                                                    no_string = String("", [])
-                                                    no_var_dec = VarDec(tipo, [arg, no_string])
-                                                    no_func.children.append(no_var_dec)
-                                                #Parser.tokenizer.selectNext()
+                                            if Parser.tokenizer.nexti.tipo == "IDENTIFIER":
+                                                arg = Identifier(Parser.tokenizer.nexti.value, [])
+                                                #variaveis.append(Parser.tokenizer.nexti.value)
                                                 
-                                    Parser.tokenizer.selectNext()
+                                                Parser.tokenizer.selectNext()
+                                                if Parser.tokenizer.nexti.tipo == "TYPE":
+                                                    Parser.tokenizer.selectNext()
+                                                    if Parser.tokenizer.nexti.tipo == "INTEIRO" or Parser.tokenizer.nexti.tipo == "FRASE":
+                                                        tipo = Parser.tokenizer.nexti.tipo
+                                                        if tipo == "INTEIRO":
+                                                            no_int = IntVal(0, [])
+                                                            no_var_dec = VarDec(tipo, [arg, no_int])
+                                                            no_func.children.append(no_var_dec)
+                                                        elif tipo == "FRASE":
+                                                            no_string = String("", [])
+                                                            no_var_dec = VarDec(tipo, [arg, no_string])
+                                                            no_func.children.append(no_var_dec)
+                                                        #Parser.tokenizer.selectNext()
+                                                        
+                                            Parser.tokenizer.selectNext()
 
                     if Parser.tokenizer.nexti.tipo == "F_PARENTESES":
                         Parser.tokenizer.selectNext()
@@ -906,17 +917,19 @@ class Parser:
                                 no_func.value = tipo_func
                                 #print("NO_FUNC.VALUE: ", no_func.value)
                                 Parser.tokenizer.selectNext()
-                                no_block = Block('', [])
-                                while Parser.tokenizer.nexti.tipo != "END":
-                                    block = Parser.parseStatement()
-                                    if block.__class__.__name__ != "NoOp":
-                                        no_block.children.append(block)
-                                    
-                                Parser.tokenizer.selectNext()
-                                if Parser.tokenizer.nexti.tipo == "BARRA_N":
-                                    no_func.children.append(no_block)
-                                    #no_func = FuncDec(name_func, variaveis, block)
-                                    return no_func
+                                if Parser.tokenizer.nexti.tipo == "ABRE_CHAVES":
+                                    Parser.tokenizer.selectNext()
+                                    no_block = Block('', [])
+                                    while Parser.tokenizer.nexti.tipo != "FECHA_CHAVES":
+                                        block = Parser.parseStatement()
+                                        if block.__class__.__name__ != "NoOp":
+                                            no_block.children.append(block)
+                                        
+                                    Parser.tokenizer.selectNext()
+                                    if Parser.tokenizer.nexti.tipo == "BARRA_N":
+                                        no_func.children.append(no_block)
+                                        #no_func = FuncDec(name_func, variaveis, block)
+                                        return no_func
                 
         elif Parser.tokenizer.nexti.tipo == "BARRA_N":
             Parser.tokenizer.selectNext()
