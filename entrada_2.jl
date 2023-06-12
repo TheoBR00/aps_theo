@@ -1,7 +1,6 @@
 variavel x, y: Inteiro
 
-x = 5
-y = 5
+x, y = 5
 
 se(x == 4){
 printa_ai("Eh 4")

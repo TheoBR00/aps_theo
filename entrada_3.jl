@@ -5,8 +5,7 @@ a = a . x
 retorna a
 }
 
-variavel a: Frase
-variavel b: Frase
+variavel a, b: Frase
 
 a = "3"
 b = concatena(a)
