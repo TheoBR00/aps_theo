@@ -1,12 +1,6 @@
-funcao concatena(variavel x: Frase):Frase{
-variavel a: Frase
+variavel a, b, c: Frase
 a = "numero igual a "
-a = a . x
-retorna a
-}
 
-variavel a, b: Frase
-
-a = "3"
-b = concatena(a)
-printa_ai(b)
+b = "3"
+c = a . b
+printa_ai(c)

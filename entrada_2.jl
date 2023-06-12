@@ -1,9 +1,6 @@
-variavel x, y: Inteiro
+variavel x, y, z: Inteiro
 
 x, y = 5
 
-se(x == 4){
-printa_ai("Eh 4")
-senao
-printa_ai("Nao eh 4")
-}
+z = x + y
+printa_ai(z)

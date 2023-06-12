@@ -99,9 +99,8 @@ class Se(Node):
         
     def evaluate(self, st):
         
-        if len(self.children) == 2:
-            if self.children[0].evaluate(st)[0]:
-                self.children[1].evaluate(st)
+        if self.children[0].evaluate(st)[0]:
+            self.children[1].evaluate(st)
         
         elif len(self.children) > 2:
             self.children[2].evaluate(st)
