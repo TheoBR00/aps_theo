@@ -3,7 +3,9 @@
 Para rodar os testes:
 
 python main.py entrada.jl
+
 python main.py entrada_2.jl
+
 python main.py entrada_3.jl
 
 # EBNF LINGUAGEM
